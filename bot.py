@@ -35,13 +35,20 @@ def delMsg(message):
 
 @bot.message_handler(commands=['start'])
 def startTimer(message):
-    args = message.text.split()
-    if len(args) > 1 and args[1].isdigit():
-        min = int(args[1])
-        schedule.every(min).minutes.do(sendMsg, message.chat.id).tag(message.chat.id)
-        bot.reply_to(message, "Timer started!")
+    keys = r.keys("*")
+    if len(keys) > 0:
+        args = message.text.split()
+        if len(args) > 1 and args[1].isdigit():
+            min = int(args[1])
+            schedule.every(min).minutes.do(sendMsg, message.chat.id).tag(message.chat.id)
+            bot.reply_to(message, "Timer started!")
+            running = True
+        else:
+            bot.reply_to(message, "Usage: /start <minutes>")
     else:
-        bot.reply_to(message, "Usage: /start <minutes>")
+        bot.reply_to(message, "There's no messages added to the database, can't start the bot!")
+
+    return running
 
 @bot.message_handler(commands=['stop'])
 def stopTimer(message):
@@ -64,6 +71,10 @@ def delMsgDB(message):
 def sendMsg(chat_id):
     global counter
     keys = r.keys("*")
+    if len(keys) == 0:
+        schedule.clear()
+        bot.send_message(chat_id, "No messages in database, timer stopped!")
+        return
     try:
         res = r.get(keys[counter])
         idx = len(keys)
