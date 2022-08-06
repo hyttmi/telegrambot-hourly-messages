@@ -49,6 +49,11 @@ def delMsg(message):
     sent = bot.reply_to(message, 'Okay, send me the ID of the message!')
     bot.register_next_step_handler(sent, delMsgDB)
 
+@bot.message_handler(commands=['delall'])
+def delMsg(message):
+    r.flushdb()
+    bot.reply_to(message, "Database cleared!")
+
 @bot.message_handler(commands=['start'])
 def startTimer(message):
     keys = r.keys("*")
@@ -73,13 +78,15 @@ def addMsgDB(message):
     bot.reply_to(message,"Message added to database!")
 
 def delMsgDB(message):
-    id = message.text
-    keys = r.keys(id)
-    if keys:
-        r.delete(id)
-        bot.reply_to(message, "ID " + id + " deleted!")
-    else:
-        bot.reply_to(message,"ID not found!")
+    msg = message.text
+    args = message.text.split()
+    for id in args:
+        keys = r.keys(id)
+        if keys:
+            r.delete(id)
+            bot.reply_to(message, "ID: " + id + " deleted!")
+        else:
+            bot.reply_to(message,"ID: " + id + " not found!")
 
 def sendMsg(chat_id):
     global counter
