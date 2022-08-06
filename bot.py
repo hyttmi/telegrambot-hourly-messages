@@ -1,3 +1,4 @@
+
 import os
 import threading
 import telebot
@@ -5,18 +6,33 @@ import schedule
 import redis
 import time
 
+help = '''
+```
+Usage:
+/start <minutes> Start the scheduled messages eg. /start 10 will post message to chat every 10 minutes
+/stop Stops the bot
+/addmsg Adds message to the database. Just use this command and bot will ask you the text afterwards
+/showmsg Shows messages from the database
+/delmsg Deletes message from the database. Just use this command and bot will ask you the ID afterwards
+```
+'''
+
 counter = 0
 
 token = os.getenv("TELEGRAM_TOKEN")
 
-bot = telebot.TeleBot(token, parse_mode=None)
+bot = telebot.TeleBot(token, parse_mode="Markdown")
 
 r = redis.StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
 
+@bot.message_handler(commands=['help'])
+def helpMsg(message):
+    bot.reply_to(message, help)
+
 @bot.message_handler(commands=['addmsg'])
 def addMsg(message):
-  sent = bot.reply_to(message, 'Send the message to me now, it will be added to the scheduled messages.')
-  bot.register_next_step_handler(sent, addMsgDB)
+    sent = bot.reply_to(message, 'Send the message to me now, it will be added to the scheduled messages.')
+    bot.register_next_step_handler(sent, addMsgDB)
 
 @bot.message_handler(commands=['showmsg'])
 def showMsg(message):
@@ -42,13 +58,10 @@ def startTimer(message):
             min = int(args[1])
             schedule.every(min).minutes.do(sendMsg, message.chat.id).tag(message.chat.id)
             bot.reply_to(message, "Timer started!")
-            running = True
         else:
             bot.reply_to(message, "Usage: /start <minutes>")
     else:
         bot.reply_to(message, "There's no messages added to the database, can't start the bot!")
-
-    return running
 
 @bot.message_handler(commands=['stop'])
 def stopTimer(message):
