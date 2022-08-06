@@ -1,1 +1,1 @@
-# telegrambot-hourly-messages
+# Telegram bot for hourly messages
