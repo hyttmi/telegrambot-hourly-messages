@@ -78,7 +78,6 @@ def sendMsg(chat_id):
     try:
         res = r.get(keys[counter])
         idx = len(keys)
-        print(idx)
         if counter < idx:
             bot.send_message(chat_id, res)
             counter += 1
