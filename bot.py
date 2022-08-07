@@ -97,9 +97,7 @@ def sendMsg(chat_id):
         bot.send_message(chat_id, "No messages in database, timer stopped!")
         return
     try:
-        print(len(keys))
         res = r.get(keys[counter])
-        print(res)
         idx = len(keys)
         if counter < idx:
             bot.send_message(chat_id, res)
@@ -107,7 +105,6 @@ def sendMsg(chat_id):
     except IndexError:
         counter = 0
         res = r.get(keys[counter])
-        print(f"{res} indexi")
         idx = len(keys)
         bot.send_message(chat_id, res)
         counter += 1
