@@ -7,22 +7,22 @@ import redis
 import time
 
 help = '''
-```
 Usage:
-/start <minutes> Start the scheduled messages eg. /start 10 will post message to chat every 10 minutes.
+<pre>
+/start &lt;minutes&gt; Start the scheduled messages eg. /start 10 will post message to chat every 10 minutes.
 /stop Stops the bot.
 /addmsg Adds message to the database. Just use this command and bot will ask you the text afterwards.
 /showmsg Shows messages from the database, ID and message.
 /delmsg Deletes message from the database. Just use this command and bot will ask you the ID afterwards.
 /delall Deletes all messages from the database.
-```
+</pre>
 '''
 
 counter = 0
 
 token = os.getenv("TELEGRAM_TOKEN")
 
-bot = telebot.TeleBot(token, parse_mode="Markdown")
+bot = telebot.TeleBot(token, parse_mode="html")
 
 r = redis.StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
 
@@ -62,7 +62,7 @@ def startTimer(message):
         args = message.text.split()
         if len(args) > 1 and args[1].isdigit():
             min = int(args[1])
-            schedule.every(min).minutes.do(sendMsg, message.chat.id).tag(message.chat.id)
+            schedule.every(min).seconds.do(sendMsg, message.chat.id).tag(message.chat.id)
             bot.reply_to(message, "Timer started, bot will send messages now every " + str(min) + " minute(s)!")
         else:
             bot.reply_to(message, "Usage: /start <minutes>")
@@ -97,19 +97,20 @@ def sendMsg(chat_id):
         bot.send_message(chat_id, "No messages in database, timer stopped!")
         return
     try:
+        print(len(keys))
         res = r.get(keys[counter])
+        print(res)
         idx = len(keys)
         if counter < idx:
             bot.send_message(chat_id, res)
             counter += 1
-        else:
-            counter = 0
-            bot.send_message(chat_id, res)
     except IndexError:
         counter = 0
         res = r.get(keys[counter])
+        print(f"{res} indexi")
         idx = len(keys)
         bot.send_message(chat_id, res)
+        counter += 1
 
 
 if __name__ == "__main__":
