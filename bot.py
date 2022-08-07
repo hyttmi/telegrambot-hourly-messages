@@ -50,7 +50,7 @@ def delMsg(message):
     bot.register_next_step_handler(sent, delMsgDB)
 
 @bot.message_handler(commands=['delall'])
-def delMsg(message):
+def delAll(message):
     r.flushdb()
     bot.reply_to(message, "Database cleared!")
 
@@ -62,7 +62,7 @@ def startTimer(message):
         if len(args) > 1 and args[1].isdigit():
             min = int(args[1])
             schedule.every(min).minutes.do(sendMsg, message.chat.id).tag(message.chat.id)
-            bot.reply_to(message, "Timer started!")
+            bot.reply_to(message, "Timer started, bot will send messages now every " + str(min) + " minute(s)!")
         else:
             bot.reply_to(message, "Usage: /start <minutes>")
     else:
