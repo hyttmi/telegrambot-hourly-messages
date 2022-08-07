@@ -9,11 +9,12 @@ import time
 help = '''
 ```
 Usage:
-/start <minutes> Start the scheduled messages eg. /start 10 will post message to chat every 10 minutes
-/stop Stops the bot
-/addmsg Adds message to the database. Just use this command and bot will ask you the text afterwards
-/showmsg Shows messages from the database
+/start <minutes> Start the scheduled messages eg. /start 10 will post message to chat every 10 minutes.
+/stop Stops the bot.
+/addmsg Adds message to the database. Just use this command and bot will ask you the text afterwards.
+/showmsg Shows messages from the database, ID and message.
 /delmsg Deletes message from the database. Just use this command and bot will ask you the ID afterwards
+/delall Deletes all messages from the database.
 ```
 '''
 
