@@ -13,7 +13,7 @@ Usage:
 /stop Stops the bot.
 /addmsg Adds message to the database. Just use this command and bot will ask you the text afterwards.
 /showmsg Shows messages from the database, ID and message.
-/delmsg Deletes message from the database. Just use this command and bot will ask you the ID afterwards
+/delmsg Deletes message from the database. Just use this command and bot will ask you the ID afterwards.
 /delall Deletes all messages from the database.
 ```
 '''
