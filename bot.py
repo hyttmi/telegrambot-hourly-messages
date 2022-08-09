@@ -90,14 +90,6 @@ def delMsgDB(message):
 
 counter = 0
 
-def testshit():
-    global counter
-    test = 2
-    keys = r.keys("*")
-    res = r.get(keys[test])
-    print(res[test])
-
-
 def sendMsg(chat_id):
     global counter
     keys = r.keys("*")
@@ -106,25 +98,16 @@ def sendMsg(chat_id):
         bot.send_message(chat_id, "No messages in database, timer stopped!")
         return
     elif len(keys) > counter:
-        print(len(keys))
-        print("eka")
-        print(len(str(keys) + "avaimet"))
-        print(str(counter) + "laskuri")
         res = r.get(keys[counter])
         bot.send_message(chat_id, res)
-        print (f"{counter}")
         counter += 1
     elif len(keys) == counter:
         counter -= 1
         res = r.get(keys[counter])
         counter = 0
-        return
         
-        
-
 if __name__ == "__main__":
     threading.Thread(target=bot.infinity_polling, name="bot_infinity_polling", daemon=True).start()
-    #testshit()
     while True:
         schedule.run_pending()
         time.sleep(1)
