@@ -61,7 +61,7 @@ def startTimer(message):
         args = message.text.split()
         if len(args) > 1 and args[1].isdigit():
             min = int(args[1])
-            schedule.every(min).seconds.do(sendMsg, message.chat.id).tag(message.chat.id)
+            schedule.every(min).minutes.do(sendMsg, message.chat.id).tag(message.chat.id)
             bot.reply_to(message, "Timer started, bot will send messages now every " + str(min) + " minute(s)!")
         else:
             bot.reply_to(message, "Usage: /start <minutes>")
