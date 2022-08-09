@@ -1,4 +1,5 @@
 
+from email import message
 import os
 import threading
 import telebot
@@ -17,8 +18,6 @@ Usage:
 /delall Deletes all messages from the database.
 </pre>
 '''
-
-counter = 0
 
 token = os.getenv("TELEGRAM_TOKEN")
 
@@ -62,7 +61,7 @@ def startTimer(message):
         args = message.text.split()
         if len(args) > 1 and args[1].isdigit():
             min = int(args[1])
-            schedule.every(min).minutes.do(sendMsg, message.chat.id).tag(message.chat.id)
+            schedule.every(min).seconds.do(sendMsg, message.chat.id).tag(message.chat.id)
             bot.reply_to(message, "Timer started, bot will send messages now every " + str(min) + " minute(s)!")
         else:
             bot.reply_to(message, "Usage: /start <minutes>")
@@ -89,6 +88,16 @@ def delMsgDB(message):
         else:
             bot.reply_to(message,"ID: " + id + " not found!")
 
+counter = 0
+
+def testshit():
+    global counter
+    test = 2
+    keys = r.keys("*")
+    res = r.get(keys[test])
+    print(res[test])
+
+
 def sendMsg(chat_id):
     global counter
     keys = r.keys("*")
@@ -96,22 +105,26 @@ def sendMsg(chat_id):
         schedule.clear()
         bot.send_message(chat_id, "No messages in database, timer stopped!")
         return
-    try:
+    elif len(keys) > counter:
+        print(len(keys))
+        print("eka")
+        print(len(str(keys) + "avaimet"))
+        print(str(counter) + "laskuri")
         res = r.get(keys[counter])
-        idx = len(keys)
-        if counter < idx:
-            bot.send_message(chat_id, res)
-            counter += 1
-    except IndexError:
-        counter = 0
-        res = r.get(keys[counter])
-        idx = len(keys)
         bot.send_message(chat_id, res)
+        print (f"{counter}")
         counter += 1
-
+    elif len(keys) == counter:
+        counter -= 1
+        res = r.get(keys[counter])
+        counter = 0
+        return
+        
+        
 
 if __name__ == "__main__":
     threading.Thread(target=bot.infinity_polling, name="bot_infinity_polling", daemon=True).start()
+    #testshit()
     while True:
         schedule.run_pending()
         time.sleep(1)
