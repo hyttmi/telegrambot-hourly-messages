@@ -85,7 +85,6 @@ def delMsgDB(message):
             bot.reply_to(message, "ID: " + id + " deleted!")
         else:
             bot.reply_to(message,"ID: " + id + " not found!")
-
 counter = 0
 
 def sendMsg(chat_id):
