@@ -1,5 +1,3 @@
-
-from email import message
 import os
 import threading
 import telebot
@@ -104,8 +102,7 @@ def sendMsg(chat_id):
     elif len(keys) == counter:
         counter -= 1
         res = r.get(keys[counter])
-        counter = 0
-        
+        counter = 0        
 if __name__ == "__main__":
     threading.Thread(target=bot.infinity_polling, name="bot_infinity_polling", daemon=True).start()
     while True:
