@@ -18,6 +18,7 @@ Usage:
 '''
 
 token = os.getenv("TELEGRAM_TOKEN")
+counter = 0 # Keeping track of database index
 
 bot = telebot.TeleBot(token, parse_mode="html")
 
@@ -85,7 +86,6 @@ def delMsgDB(message):
             bot.reply_to(message, "ID: " + id + " deleted!")
         else:
             bot.reply_to(message,"ID: " + id + " not found!")
-counter = 0
 
 def sendMsg(chat_id):
     global counter
@@ -101,7 +101,8 @@ def sendMsg(chat_id):
     elif len(keys) == counter:
         counter -= 1
         res = r.get(keys[counter])
-        counter = 0        
+        counter = 0
+        
 if __name__ == "__main__":
     threading.Thread(target=bot.infinity_polling, name="bot_infinity_polling", daemon=True).start()
     while True:
